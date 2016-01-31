@@ -1,0 +1,24 @@
+import oscP5.*;
+import netP5.*;
+OscP5 oscP5555555;
+NetAddress myRemoteLocationnnnnnnnn;
+
+void println1(int p,int l,char c){
+println1(p,l,""+c);
+}
+void println1(int p,int l,int i){
+println1(p,l,""+i);
+}
+void println1(int p,int l,float f){
+println1(p,l,""+f);
+}
+void println1(int p,int l,double d){
+println1(p,l,""+d);
+}
+void println1(int p,int l,String s){
+OscMessage myMessageeeeeeeeee = new OscMessage("/test");
+myMessageeeeeeeeee.add(p);
+myMessageeeeeeeeee.add(l);
+oscP5555555.send(myMessageeeeeeeeee,myRemoteLocationnnnnnnnn);
+println(s);
+}

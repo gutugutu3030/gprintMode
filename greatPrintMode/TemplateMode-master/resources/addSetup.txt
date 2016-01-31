@@ -1,0 +1,3 @@
+Logger.flags = new int[] { Logger.OFF, Logger.OFF, Logger.OFF, Logger.OFF, Logger.OFF };
+oscP5555555 = new OscP5(this,8778);
+myRemoteLocationnnnnnnnn = new NetAddress("localhost", 9978);
