@@ -17,8 +17,17 @@ println1(p,l,""+d);
 }
 void println1(int p,int l,String s){
 OscMessage myMessageeeeeeeeee = new OscMessage("/test");
-myMessageeeeeeeeee.add(p);
-myMessageeeeeeeeee.add(l);
+byte b[]=new byte[0];
+try{
+b=(p+","+l+","+s).getBytes("UTF8");
+}catch(Exception e){
+}
+for(int i=0;i<b.length;i++){
+myMessageeeeeeeeee.add(b[i]);
+}
+//myMessageeeeeeeeee.add(""+p);
+//myMessageeeeeeeeee.add(""+l);
+//myMessageeeeeeeeee.add(s);
 oscP5555555.send(myMessageeeeeeeeee,myRemoteLocationnnnnnnnn);
 println(s);
 }

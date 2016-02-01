@@ -11,8 +11,8 @@
 	<property name="java.target.version" value="1.6" />
 
 	<!-- location of processing jars (core.jar, pde.jar, ..) -->
-	<property name="processing.classes.core" location="D:\Dropbox\java\greatPrintMode" />
-	<property name="processing.classes.pde" location="D:\Dropbox\java\greatPrintMode" />
+	<property name="processing.classes.core" location="C:\Users\gutug_000\git\gprintMode\greatPrintMode" />
+	<property name="processing.classes.pde" location="C:\Users\gutug_000\git\gprintMode\greatPrintMode" />
 
 	<!-- folder to install modes in (probably a folder called "modes" inside your sketchbook folder) -->
 	<property name="processing.modes" location="D:\\Dropbox\\processing\\modes" />

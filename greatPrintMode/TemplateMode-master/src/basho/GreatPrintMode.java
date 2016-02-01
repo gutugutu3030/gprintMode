@@ -41,7 +41,6 @@ import processing.mode.java.*;
 import processing.mode.java.runner.*;
 import processing.app.*;
 
-
 import com.illposed.osc.*;
 
 /**
@@ -50,7 +49,7 @@ import com.illposed.osc.*;
  */
 public class GreatPrintMode extends JavaMode implements OSCListener {
 
-	String addCode,addSetup;
+	String addCode, addSetup;
 	OSCPortIn myOSCPort;
 	GreatPrintEditor editor;
 
@@ -60,13 +59,14 @@ public class GreatPrintMode extends JavaMode implements OSCListener {
 		// Fetch examples and reference from java mode
 		examplesFolder = Base.getContentFile("modes/java/examples");
 		referenceFolder = Base.getContentFile("modes/java/reference");
-		addCode=readTXT(modePath("../addCode.txt"));
-		addSetup=readTXT(modePath("../addSetup.txt"));
+		addCode = readTXT(modePath("../addCode.txt"));
+		addSetup = readTXT(modePath("../addSetup.txt"));
 
 		try {
 			myOSCPort = new OSCPortIn(9978);
 			myOSCPort.addListener("/test", this);
 			myOSCPort.startListening();
+			System.out.println("osc ok");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,36 +115,34 @@ public class GreatPrintMode extends JavaMode implements OSCListener {
 	/*
 	 * @Override public String[] getIgnorable() { return null; }
 	 */
-	public Runner handleRun(Sketch sketch, RunnerListener listener)
-			throws SketchException {
+	public Runner handleRun(Sketch sketch, RunnerListener listener) throws SketchException {
 		// 普通にrunボタンが押された場合
 		SketchCode[] code = sketch.getCode();
 
-		String oldC[]=new String[code.length];
+		String oldC[] = new String[code.length];
 
-		//printlnの差し替え
-		big:for(int i=0;i<code.length;i++){
+		// printlnの差し替え
+		big: for (int i = 0; i < code.length; i++) {
 			String c = code[i].getProgram();
-			oldC[i]=c;
-			StringBuilder sb=new StringBuilder();
-			String lines[]=c.split("\n");
-			for(int j=0;j<lines.length;j++){
-				sb.append(lines[j].replaceAll("println\\(", "println1\\("+i+","+j+","));
+			oldC[i] = c;
+			StringBuilder sb = new StringBuilder();
+			String lines[] = c.split("\n");
+			for (int j = 0; j < lines.length; j++) {
+				sb.append(lines[j].replaceAll("println\\(", "println1\\(" + i + "," + j + ","));
 				sb.append('\n');
 			}
 			code[i].setProgram(sb.toString());
 		}
 
-
-		//setupの中の追記
-		int stack=0;
-		int setupflg=-1;
-		big:for(int i=0;i<code.length;i++){
+		// setupの中の追記
+		int stack = 0;
+		int setupflg = -1;
+		big: for (int i = 0; i < code.length; i++) {
 			String c = code[i].getProgram();
-			StringBuilder sb=new StringBuilder();
-			String lines[]=c.split("\n");
-			for(int j=0;j<lines.length;j++){
-				if(j>=1&&lines[j-1].indexOf("setup()")!=-1){
+			StringBuilder sb = new StringBuilder();
+			String lines[] = c.split("\n");
+			for (int j = 0; j < lines.length; j++) {
+				if (j >= 1 && lines[j - 1].indexOf("setup()") != -1) {
 					sb.append(addSetup);
 					sb.append('\n');
 				}
@@ -154,9 +152,10 @@ public class GreatPrintMode extends JavaMode implements OSCListener {
 			code[i].setProgram(sb.toString());
 		}
 
-		//class Bashoの追記
+		// class Bashoの追記
 		String c = code[0].getProgram();
 		code[0].setProgram(addCode + c);
+		System.out.println(addCode + c);
 		JavaBuild build = new JavaBuild(sketch);
 		String appletClassName = build.build(false);
 		if (appletClassName != null) {
@@ -207,6 +206,7 @@ public class GreatPrintMode extends JavaMode implements OSCListener {
 	public String modePath(String str) {
 		return folder.getAbsolutePath().replace("\\", "/") + "/mode/" + str;
 	}
+
 	public String readTXT(String path) {
 		// String str="";
 		StringBuilder str = new StringBuilder();
@@ -234,10 +234,25 @@ public class GreatPrintMode extends JavaMode implements OSCListener {
 	}
 
 	public void acceptMessage(java.util.Date date, OSCMessage oSCMessage) {
-		int page = (Integer) oSCMessage.getArguments()[0];
-		int line = (Integer) oSCMessage.getArguments()[1];
-//		System.out.println("line:"+line);
-		editor.setLine(page,line);
+		Object args[] = oSCMessage.getArguments();
+		byte b[] = new byte[args.length];
+		for (int i = 0; i < b.length; i++) {
+			b[i] = (byte) ((int) ((Integer) args[i]));
+		}
+		try {
+			String data = new String(b, "UTF8");
+			String dsplit[] = data.split(",");
+			int page = Integer.parseInt(dsplit[0]);
+			int line = Integer.parseInt(dsplit[1]);
+			StringBuilder sb = new StringBuilder();
+			sb.append(page);
+			sb.append(",");
+			sb.append(line);
+			sb.append(",");
+			String mes = data.substring(sb.length());
+			editor.setLine(page, line, mes);
+		} catch (Exception e) {
+		}
 	}
 
 }
