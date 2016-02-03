@@ -155,7 +155,6 @@ public class GreatPrintMode extends JavaMode implements OSCListener {
 		// class Bashoの追記
 		String c = code[0].getProgram();
 		code[0].setProgram(addCode + c);
-		System.out.println(addCode + c);
 		JavaBuild build = new JavaBuild(sketch);
 		String appletClassName = build.build(false);
 		if (appletClassName != null) {
