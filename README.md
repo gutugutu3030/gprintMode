@@ -1,6 +1,8 @@
 # gprintMode
 Processing 2.x用のコンソールを強化するモードです．コンソールからソースを検索したり，printlnからコンソールを検索したり出来ます．
+
 ![スクショ](https://i.gyazo.com/b2d4700ccc6fbf174a10a3db1e04fcfc.gif)
+
 ## Download
 [こちらからダウンロードできます](https://www.dropbox.com/s/5ogamroq70ywa4n/GreatPrintMode.zip?dl=0)
 ## 導入方法
